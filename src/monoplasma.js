@@ -264,7 +264,7 @@ class Monoplasma {
      * Snapshot the Monoplasma state for later use (getMemberAt, getProofAt)
      * @param {number} blockNumber root-chain block number after which this block state is valid
      */
-    async storeBlock(blockNumber) {
+    storeBlock(blockNumber) {
         const members = this.members.map(m => m.toObject())
         const timestamp = now()
         const totalEarnings = this.getTotalRevenue()
@@ -275,7 +275,7 @@ class Monoplasma {
             totalEarnings,
         }
         this.latestBlocks.unshift(latestBlock)  // = insert to beginning
-        await this.store.saveBlock(latestBlock)
+        this.store.saveBlockSync(latestBlock)
         return latestBlock
     }
 

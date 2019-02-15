@@ -101,6 +101,15 @@ module.exports = (storeDir) => {
             return fs.writeFile(path, raw)
         },
 
+        saveBlockSync: (block) => {
+            if (!block || !block.blockNumber) { throw new Error(`Bad block: ${JSON.stringify(block)}`) }
+            const path = getBlockPath(block.blockNumber)
+            const raw = JSON.stringify(block)
+            log(`Saving block ${block.blockNumber} to ${path}: ${raw.length < maxLogLen ? raw : raw.slice(0, maxLogLen) + "... TOTAL LENGTH: " + raw.length}`)
+            if (fs.existsSync(path)) { console.error(`Overwriting block ${block.blockNumber}!`) }
+            fs.writeFileSync(path, raw)
+        },
+
         /**
          * @typedef {Object} Event join/part events are stored in file for playback, others come from Ethereum
          * @property {number} blockNumber Root-chain block number after which events happened

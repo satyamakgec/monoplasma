@@ -37,12 +37,12 @@ module.exports = class MonoplasmaOperator extends MonoplasmaWatcher {
         this.log(`Publishing block ${bnum}`)
         const hash = this.plasma.getRootHash()
         const ipfsHash = ""
+        this.plasma.storeBlock(bnum)
+        this.state.lastPublishedBlock = bnum
         await this.contract.methods.recordBlock(bnum, hash, ipfsHash).send({
             from: this.address,
             gas: 4000000,
             gasPrice: this.state.gasPrice
         })
-        this.state.lastPublishedBlock = bnum
-        return this.plasma.storeBlock(bnum)
     }
 }
